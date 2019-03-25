@@ -254,32 +254,55 @@ public class SerialPortHelper {
         return loopData;
     }
 
+    /**
+     * 设置循环发送的数据
+     * @param loopData byte数据
+     */
     public void setLoopData(byte[] loopData) {
         this.loopData = loopData;
     }
 
-    public void setTxtLoopData(String sTxt) {
-        this.loopData = sTxt.getBytes();
+    /**
+     * 设置循环发送的数据
+     * @param str 传入的字符串
+     * @param isHexString 是否为16进制字符串
+     */
+    public void setLoopData(String str,boolean isHexString) {
+        if(isHexString){
+            this.loopData = str.getBytes();
+        }else {
+            this.loopData = HexStringUtils.hexString2ByteArray(str);
+        }
     }
 
-    public void setHexLoopData(String sHex) {
-        this.loopData = HexStringUtils.hexString2ByteArray(sHex);
-    }
-
+    /**
+     * 获取延迟
+     * @return 时间（毫秒）
+     */
     public int getDelay() {
         return delay;
     }
 
+    /**
+     * 设置延时（毫秒）
+     * @param delay
+     */
     public void setDelay(int delay) {
         this.delay = delay;
     }
 
+    /**
+     * 开启循环发送
+     */
     public void startSend() {
         if (sendThread != null) {
             sendThread.setResume();
         }
     }
 
+    /**
+     * 停止循环发送
+     */
     public void stopSend() {
         if (sendThread != null) {
             sendThread.setSuspendFlag();

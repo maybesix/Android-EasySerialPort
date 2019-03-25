@@ -46,7 +46,7 @@ public class HexStringUtils {
     }
 
     /**
-     * 字节数组转转hex字符串
+     * 字节数组转hex字符串
      *
      * @param hexbytearray 传入的数据
      * @return 转换后的结果

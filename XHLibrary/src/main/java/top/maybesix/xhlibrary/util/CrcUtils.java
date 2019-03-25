@@ -142,7 +142,7 @@ public class CrcUtils {
     }
 
     /**
-     * 传入bytes，计算得到CRC验证码
+         * 传入bytes，计算得到CRC验证码
      *
      * @param bytes 参与运算的数组
      * @return CRC十六进制字符串的验证码
