@@ -89,3 +89,4 @@ toHexString   : int转16进制字符串
 getCrc        : 传入bytes，计算得到CRC验证码
 hexToByte     : 16进制字符串转byte数组
 ```
+## 如果这个项目对你有帮助，请点个star！
