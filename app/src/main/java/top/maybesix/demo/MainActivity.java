@@ -43,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements SerialPortHelper.
     protected void onStart() {
         super.onStart();
         //执行发送
-        serialPort.sendHex(UartCommandUtils.getBatteryVoltage());
+        serialPort.sendHex("A55A0010002096");
+        serialPort.sendHex("hello world");
+
     }
 
     private void initView() {
@@ -52,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements SerialPortHelper.
             @Override
             public void onClick(View v) {
                 //执行发送
-                serialPort.sendHex(UartCommandUtils.getBatteryVoltage());
+                serialPort.sendHex("A55A0010002096");
+                serialPort.sendHex("hello world");
             }
         });
     }
