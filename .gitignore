@@ -11,3 +11,8 @@
 /build
 /captures
 .externalNativeBuild
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
+XHLibrary/libs/
+XHLibrary/src/main/res/drawable/
+app/libs/

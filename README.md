@@ -1,6 +1,21 @@
 # Android-XHLibrary
 一个简易的串口操作程序
-
+## 使用说明
+第一步，在gradle(Project)下添加
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://www.jitpack.io' }
+		}
+	}
+```
+第二步，导入依赖
+```
+dependencies {
+		implementation 'com.github.User:Repo:Tag'
+	}
+```
 在需要实现Activity或者Service中这样写：
 
 ``` 
