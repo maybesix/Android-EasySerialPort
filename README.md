@@ -13,7 +13,7 @@ allprojects {
 第二步，导入依赖
 ```
 dependencies {
-		implementation 'com.github.User:Repo:Tag'
+	        implementation 'com.github.maybesix:Android-XHLibrary:v1.0.0'
 	}
 ```
 在需要实现Activity或者Service中这样写：
