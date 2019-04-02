@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.blankj.utilcode.util.ServiceUtils;
+
 import top.maybesix.xhlibrary.serialport.ComPortData;
 import top.maybesix.xhlibrary.serialport.SerialPortHelper;
 import top.maybesix.xhlibrary.util.HexStringUtils;
@@ -15,7 +17,6 @@ import top.maybesix.xhlibrary.util.HexStringUtils;
  */
 public class MainActivity extends AppCompatActivity implements SerialPortHelper.OnSerialPortReceivedListener {
     private static final String TAG = "MainActivity";
-    private Button button;
     SerialPortHelper serialPort;
 
     @Override
@@ -27,35 +28,26 @@ public class MainActivity extends AppCompatActivity implements SerialPortHelper.
     }
 
     private void initSerialPort() {
+        String port = "/dev/ttyHSL1";
+        int baudRate = 9600;
         //串口程序初始化
-        serialPort = new SerialPortHelper();
-        //设置端口
-        serialPort.setPort("/dev/ttyHSL1");
-        //设置波特率
-        serialPort.setBaudRate("9600");
-        //设置接收消息监听
-        serialPort.setSerialPortReceivedListener(this);
+        serialPort = new SerialPortHelper(port, baudRate, this);
         //打开串口
         serialPort.open();
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
-        //执行发送
-        serialPort.sendHex("A55A0010002096");
-        serialPort.sendHex("hello world");
-
     }
 
     private void initView() {
-        button = (Button) findViewById(R.id.button);
+        Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //执行发送
-                serialPort.sendHex("A55A0010002096");
-                serialPort.sendHex("hello world");
+                serialPort.sendHex("A55A01000396");
             }
         });
     }

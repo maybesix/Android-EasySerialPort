@@ -28,28 +28,13 @@ public class SerialPortHelper {
     private byte[] loopData = new byte[]{0x30};
     private int delay = 500;
 
-    public SerialPortHelper() {
-        this("/dev/ttyHSL1", 9600);
-    }
 
-    public SerialPortHelper(String port) {
-        this(port, 9600);
-    }
-
-    public SerialPortHelper(String port, int baudRate) {
+    public SerialPortHelper(String port, int baudRate, OnSerialPortReceivedListener listener) {
         this.port = port;
         this.baudRate = baudRate;
-        this.onSerialPortReceivedListener = new OnSerialPortReceivedListener() {
-            @Override
-            public void onSerialPortDataReceived(ComPortData comPortData) {
-                Log.d(TAG, "onSerialPortDataReceived: 未设置监听，采用默认Listener");
-            }
-        };
+        this.onSerialPortReceivedListener = listener;
     }
 
-    public SerialPortHelper(String port, String sBaudRate) {
-        this(port, Integer.parseInt(sBaudRate));
-    }
 
     public void setSerialPortReceivedListener(OnSerialPortReceivedListener onSerialPortReceivedListener) {
         this.onSerialPortReceivedListener = onSerialPortReceivedListener;
@@ -256,6 +241,7 @@ public class SerialPortHelper {
 
     /**
      * 设置循环发送的数据
+     *
      * @param loopData byte数据
      */
     public void setLoopData(byte[] loopData) {
@@ -264,19 +250,21 @@ public class SerialPortHelper {
 
     /**
      * 设置循环发送的数据
-     * @param str 传入的字符串
+     *
+     * @param str         传入的字符串
      * @param isHexString 是否为16进制字符串
      */
-    public void setLoopData(String str,boolean isHexString) {
-        if(isHexString){
+    public void setLoopData(String str, boolean isHexString) {
+        if (isHexString) {
             this.loopData = str.getBytes();
-        }else {
+        } else {
             this.loopData = HexStringUtils.hexString2ByteArray(str);
         }
     }
 
     /**
      * 获取延迟
+     *
      * @return 时间（毫秒）
      */
     public int getDelay() {
@@ -285,6 +273,7 @@ public class SerialPortHelper {
 
     /**
      * 设置延时（毫秒）
+     *
      * @param delay
      */
     public void setDelay(int delay) {
