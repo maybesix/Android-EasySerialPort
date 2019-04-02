@@ -20,14 +20,10 @@ dependencies {
 
 ``` 
 SerialPortHelper serialPort;
+String port = "/dev/ttyHSL1";
+int baudRate = 9600;
 //串口程序初始化
-serialPort = new SerialPortHelper();
-//设置端口
-serialPort.setPort("/dev/ttyHSL1");
-//设置波特率
-serialPort.setBaudRate("9600");
-//设置接收消息监听
-serialPort.setSerialPortReceivedListener(this);
+serialPort = new SerialPortHelper(port, baudRate, this);
 //打开串口
 serialPort.open();
 ```
