@@ -1,1 +1,3 @@
-include ':app', ':XHLibrary'
+rootProject.name='Android-EasySerialPort'
+include ':app'
+include ':easyserialport'

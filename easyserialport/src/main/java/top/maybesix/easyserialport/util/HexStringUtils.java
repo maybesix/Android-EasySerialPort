@@ -1,4 +1,4 @@
-package top.maybesix.xhlibrary.util;
+package top.maybesix.easyserialport.util;
 
 /**
  * @author MaybeSix

@@ -1,4 +1,4 @@
-package top.maybesix.xhlibrary.serialport;
+package top.maybesix.easyserialport;
 
 import android.util.Log;
 
@@ -9,35 +9,77 @@ import java.io.OutputStream;
 import java.security.InvalidParameterException;
 
 import android_serialport_api.SerialPort;
-import top.maybesix.xhlibrary.util.HexStringUtils;
+import top.maybesix.easyserialport.util.HexStringUtils;
 
 /**
  * @author MaybeSix
  */
-public class SerialPortHelper {
+public class EasySerialPort {
     private static final String TAG = "SerialPortHelper";
-    private OnSerialPortReceivedListener onSerialPortReceivedListener;
     private SerialPort serialPort;
     private OutputStream outputStream;
     private InputStream inputStream;
     private ReadThread readThread;
     private SendThread sendThread;
-    private String port;
-    private int baudRate;
     private boolean openState = false;
     private byte[] loopData = new byte[]{0x30};
     private int delay = 500;
 
+    /**
+     * 串口参数
+     */
+    private String port;
+    private int baudRate;
+    private OnSerialPortReceivedListener onSerialPortReceivedListener;
+    private OnStatesChangeListener onStatesChangeListener;
 
-    public SerialPortHelper(String port, int baudRate, OnSerialPortReceivedListener listener) {
+
+    private EasySerialPort(String port, int baudRate, OnSerialPortReceivedListener listener) {
         this.port = port;
         this.baudRate = baudRate;
         this.onSerialPortReceivedListener = listener;
     }
 
+    public static class Builder {
+        private String port;
+        private int baudRate = 9600;
+        private OnSerialPortReceivedListener onSerialPortReceivedListener;
+        private OnStatesChangeListener onStatesChangeListener;
+
+        public Builder setPort(String port) {
+            this.port = port;
+            return this;
+        }
+
+        public Builder setBaudRate(int baudRate) {
+            this.baudRate = baudRate;
+            return this;
+        }
+
+        public Builder setListener(OnSerialPortReceivedListener onSerialPortReceivedListener) {
+            this.onSerialPortReceivedListener = onSerialPortReceivedListener;
+            return this;
+        }
+
+        public Builder setSatesListener(OnStatesChangeListener onStatesChangeListener) {
+            this.onStatesChangeListener = onStatesChangeListener;
+            return this;
+        }
+
+        public EasySerialPort build() throws Exception {
+            if (port == null || port.isEmpty()) {
+                throw new Exception("port is null or empty!");
+            }
+            return new EasySerialPort(port, baudRate, onSerialPortReceivedListener);
+        }
+    }
 
     public void setSerialPortReceivedListener(OnSerialPortReceivedListener onSerialPortReceivedListener) {
         this.onSerialPortReceivedListener = onSerialPortReceivedListener;
+    }
+
+    public void setSatesListener(OnStatesChangeListener onStatesChangeListener) {
+        this.onStatesChangeListener = onStatesChangeListener;
     }
 
     /**
@@ -50,24 +92,37 @@ public class SerialPortHelper {
     }
 
     /**
+     * 是否没有开启串口
+     *
+     * @return
+     */
+    public boolean isNotOpen() {
+        return !openState;
+    }
+    /**
      * 串口打开方法
      */
     public void open() {
         try {
             baseOpen();
             Log.i(TAG, "打开串口成功！");
+            onStatesChangeListener.onOpen(true, "");
         } catch (SecurityException e) {
-            e.printStackTrace();
             Log.e(TAG, "打开串口失败:没有串口读/写权限!");
+            e.printStackTrace();
+            onStatesChangeListener.onOpen(false, "没有串口读/写权限!");
         } catch (IOException e) {
-            e.printStackTrace();
             Log.e(TAG, "打开串口失败:未知错误!");
-        } catch (InvalidParameterException e) {
             e.printStackTrace();
+            onStatesChangeListener.onOpen(false, "未知错误!");
+        } catch (InvalidParameterException e) {
             Log.e(TAG, "打开串口失败:参数错误!");
+            e.printStackTrace();
+            onStatesChangeListener.onOpen(false, "参数错误!");
         } catch (Exception e) {
             Log.e(TAG, "openComPort: 其他错误");
             e.printStackTrace();
+            onStatesChangeListener.onOpen(false, "其他错误!");
         }
     }
 
@@ -95,6 +150,7 @@ public class SerialPortHelper {
             serialPort = null;
         }
         openState = false;
+        onStatesChangeListener.onClose();
     }
 
     /**
@@ -308,5 +364,23 @@ public class SerialPortHelper {
          * @param comPortData 接收到的数据类
          */
         void onSerialPortDataReceived(ComPortData comPortData);
+    }
+
+    /**
+     * 实现串口状态改变
+     */
+    public interface OnStatesChangeListener {
+        /**
+         * 打开时的回调
+         *
+         * @param isSuccess 是否成功
+         * @param reason    原因
+         */
+        void onOpen(boolean isSuccess, String reason);
+
+        /**
+         * 关闭时的回调
+         */
+        void onClose();
     }
 }

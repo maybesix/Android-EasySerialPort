@@ -1,6 +1,4 @@
-package top.maybesix.xhlibrary.serialport;
-
-import java.text.SimpleDateFormat;
+package top.maybesix.easyserialport;
 
 /**
  * @author MaybeSix
@@ -8,16 +6,16 @@ import java.text.SimpleDateFormat;
  */
 public class ComPortData {
     private byte[] recData;
-    private String recTime;
+    private long recTime;
     private String comPort;
 
-    public ComPortData(String comPort, byte[] buffer, int size){
-        this.comPort=comPort;
-        recData=new byte[size];
+    ComPortData(String comPort, byte[] buffer, int size) {
+        this.comPort = comPort;
+        recData = new byte[size];
         System.arraycopy(buffer, 0, recData, 0, size);
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("hh:mm:ss");
-        recTime = sDateFormat.format(new java.util.Date());
+        recTime = System.currentTimeMillis();
     }
+
     public byte[] getRecData() {
         return recData;
     }
@@ -26,11 +24,11 @@ public class ComPortData {
         this.recData = recData;
     }
 
-    public String getRecTime() {
+    public long getRecTime() {
         return recTime;
     }
 
-    public void setRecTime(String recTime) {
+    public void setRecTime(long recTime) {
         this.recTime = recTime;
     }
 
