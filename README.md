@@ -52,6 +52,44 @@ public class MainActivity extends AppCompatActivity implements SerialPortHelper.
     }
 }
 ```
+或者可以使用构造者链式调用(kotlin写法)
+```
+ serialPort = EasySerialPort.Builder()
+            .setBaudRate(9600)
+            .setPort("")
+            .setSatesListener(object : EasySerialPort.OnStatesChangeListener {
+                /**
+                 * 打开的状态回调
+                 *
+                 * @param isSuccess 是否成功
+                 * @param reason    原因
+                 */
+                override fun onOpen(isSuccess: Boolean, reason: String) {
+                    Log.i("EasySerialPort", "是否开启成功：$isSuccess,原因：$reason")
+                    Toast.makeText(
+                        applicationContext,
+                        "是否开启成功：$isSuccess,原因：$reason",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                }
+
+                /**
+                 * 关闭的状态回调
+                 */
+                override fun onClose() {
+                    Log.i("EasySerialPort", "已关闭")
+                    Toast.makeText(applicationContext, "已关闭", Toast.LENGTH_SHORT).show()
+                }
+            })
+            .setListener {
+                //处理接收的串口消息
+                val s: String = HexStringUtils.byteArray2HexString(it.recData)
+                Log.i("EasySerialPort", "onReceived: $s,time:${it.recTime}")
+                textView.text = s
+            }
+            .build()
+```
 至此，串口的打开、发送、接收就全部完成了。
 ## 串口相关
 > 串口操作类 → [SerialPortHelper](https://github.com/maybesix/Android-XHLibrary/blob/master/XHLibrary/src/main/java/top/maybesix/xhlibrary/serialport/SerialPortHelper.java)
@@ -100,4 +138,13 @@ toHexString   : int转16进制字符串
 getCrc        : 传入bytes，计算得到CRC验证码
 hexToByte     : 16进制字符串转byte数组
 ```
+
+## 项目更新内容：
+### v1.1:
+
+1. 升级至androidx
+2. 去除不必要的依赖
+3. 支持链式调用配置监听事件、设置端口号、设置波特率
+4. 修改串口接收数据时格式化时间，现在改为时间戳
+
 ## 如果这个项目对你有帮助，请点个star！
