@@ -1,5 +1,6 @@
-# Android-XHLibrary
-一个简易的串口操作程序
+# Android-EasySerialPort
+非常好用、非常稳定的Android串口封装
+久经两年多项目考验，一直很稳定
 ## 使用说明
 第一步，在gradle(Project)下添加
 ```
